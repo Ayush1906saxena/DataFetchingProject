@@ -4,6 +4,12 @@ import fs from "fs/promises";
 
 export default function ProductDetail(props) {
   const { loadedProduct } = props;
+
+  // checking if its there yet.
+  if (!loadedProduct) {
+    return <p>Loading.....</p>;
+  }
+
   return (
     <Fragment>
       <h1>{loadedProduct.title}</h1>
@@ -37,11 +43,10 @@ export async function getStaticProps(context) {
 // We cannot pre-generate all the possible pages
 export async function getStaticPaths() {
   return {
-    paths: [
-      { params: { pid: "p1" } },
-      { params: { pid: "p2" } },
-      { params: { pid: "p3" } },
-    ],
-    fallback: false,
+    paths: [{ params: { pid: "p1" } }],
+    // fallback is important when we have a lot of keys that need to be pregenerated
+    fallback: true,
+    // we can set fallback to true and then even the paths not listed can be valid
+    // basically can help us pregenerate highly visited pages and postpone generation of less-frequent ones
   };
 }
