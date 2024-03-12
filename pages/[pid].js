@@ -38,6 +38,12 @@ export async function getStaticProps(context) {
 
   const product = data.products.find((product) => product.id === productId);
 
+  if (!product) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       loadedProduct: product,
@@ -55,7 +61,7 @@ export async function getStaticPaths() {
   return {
     paths: pathsWithParams,
     // fallback is important when we have a lot of keys that need to be pregenerated
-    fallback: false,
+    fallback: true,
     // we can set fallback to true and then even the paths not listed can be valid
     // basically can help us pregenerate highly visited pages and postpone generation of less-frequent ones
   };
